@@ -1,0 +1,30 @@
+import argparse
+from pathlib import Path
+from gem5.components.boards.simple_board import SimpleBoard
+from gem5.components.cachehierarchies.classic.no_cache import NoCache
+from gem5.components.memory.single_channel import SingleChannelDDR3_1600
+from gem5.components.processors.cpu_types import CPUTypes
+from gem5.components.processors.simple_processor import SimpleProcessor
+from gem5.isas import ISA
+from gem5.simulate.simulator import Simulator
+from gem5.resources.resource import CustomResource
+
+p = argparse.ArgumentParser()
+p.add_argument("--bin", required=True)
+p.add_argument("--n", type=int, default=8192)
+args = p.parse_args()
+
+board = SimpleBoard(
+    clk_freq="2GHz",
+    processor=SimpleProcessor(cpu_type=CPUTypes.TIMING, num_cores=1, isa=ISA.RISCV),
+    memory=SingleChannelDDR3_1600("1GiB"),
+    cache_hierarchy=NoCache(),
+)
+
+board.set_se_binary_workload(
+    CustomResource(args.bin),
+    arguments=[str(args.n)],
+)
+
+sim = Simulator(board=board)
+sim.run()
