@@ -604,7 +604,7 @@
                                 "path": "board.processor.cores.core.workload",
                                 "cmd": [
                                     "/home/riccardo/Desktop/softmax-rvv/benches/softmax_scalar",
-                                    "8192"
+                                    "64000"
                                 ],
                                 "cwd": "/home/riccardo/Desktop/softmax-rvv",
                                 "drivers": [],

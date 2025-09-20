@@ -603,7 +603,8 @@
                                 "name": "workload",
                                 "path": "board.processor.cores.core.workload",
                                 "cmd": [
-                                    "/home/riccardo/Desktop/softmax-rvv/benches/rv-hello-world"
+                                    "/home/riccardo/Desktop/softmax-rvv/benches/softmax_scalar",
+                                    "32000"
                                 ],
                                 "cwd": "/home/riccardo/Desktop/softmax-rvv",
                                 "drivers": [],
@@ -612,7 +613,7 @@
                                 "errout": "cerr",
                                 "euid": 100,
                                 "eventq_index": 0,
-                                "executable": "/home/riccardo/Desktop/softmax-rvv/benches/rv-hello-world",
+                                "executable": "/home/riccardo/Desktop/softmax-rvv/benches/softmax_scalar",
                                 "gid": 100,
                                 "input": "cin",
                                 "kvmInSE": false,
