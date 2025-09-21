@@ -22,6 +22,13 @@ import csv
 import os
 import re
 import sys
+
+# add near the top
+import argparse
+from pathlib import Path
+
+# ... keep the rest of y
+
 from typing import Dict, List, Optional
 
 
@@ -151,15 +158,46 @@ def write_csv(rows: List[Dict[str, object]], output_path: str = "softmax_stats.c
         writer.writeheader()
         for row in rows:
             writer.writerow({key: row.get(key, "") for key in fieldnames})
+            
 
 
-def main(argv: List[str]) -> None:
-    if len(argv) < 2:
-        print("Usage: python parse_softmax_stats.py <file1> [<file2> ...]", file=sys.stderr)
-        sys.exit(1)
-    filepaths = argv[1:]
-    rows = collate_metrics(filepaths)
-    write_csv(rows)
+# ... keep the rest of your code (extract_dimension, parse_metrics_from_file, collate_metrics, write_csv)
+
+def parse_cli_args(argv):
+    p = argparse.ArgumentParser(
+        description="Parse multiple gem5 softmax stats files into a single CSV."
+    )
+    p.add_argument(
+        "-o", "--output",
+        default="softmax_stats.csv",
+        help="Output CSV path (folder + filename). Default: softmax_stats.csv"
+    )
+    p.add_argument(
+        "files",
+        nargs="+",
+        help="Input stats files to parse (e.g., softmax_N*.txt)"
+    )
+    return p.parse_args(argv[1:])
+
+def main(argv):
+    args = parse_cli_args(argv)
+    rows = collate_metrics(args.files)
+
+    out_path = Path(args.output)
+    out_path.parent.mkdir(parents=True, exist_ok=True)   # auto-create directories
+    write_csv(rows, str(out_path))
+
+if __name__ == "__main__":
+    main(sys.argv)
+
+
+# def main(argv: List[str]) -> None:
+#     if len(argv) < 2:
+#         print("Usage: python parse_softmax_stats.py <file1> [<file2> ...]", file=sys.stderr)
+#         sys.exit(1)
+#     filepaths = argv[1:]
+#     rows = collate_metrics(filepaths)
+#     write_csv(rows)
 
 
 if __name__ == "__main__":

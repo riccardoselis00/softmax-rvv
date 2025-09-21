@@ -34,3 +34,12 @@ def plot_stats(metric, *csv_files):
     ax.legend()
     plt.tight_layout()
     plt.show()
+
+if __name__ == "__main__":
+    import argparse
+    p = argparse.ArgumentParser(description="Plot one metric from one or more CSVs.")
+    p.add_argument("metric", help="Full metric name, e.g. board.cache_hierarchy.membus.respLayer1.utilization")
+    p.add_argument("csvs", nargs="+", help="One or more CSV files (same schema)")
+    args = p.parse_args()
+    # assumes your plot_stats(metric, *csvs) signature
+    plot_stats(args.metric, *args.csvs)
