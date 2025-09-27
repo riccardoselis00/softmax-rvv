@@ -2,13 +2,25 @@
 
 ## Delving Into the Project
 
-## Compile into RISC-V executable
+## Compiling 
+
+### Create the assembly.s  to be modified manually with Custom Instruction
 
 ```bash
 cd ~/Desktop/softmax-rvv
-riscv64-linux-gnu-gcc -O3 -static -s -o benches/exe benches/code.c -lm
+riscv64-linux-gnu-gcc -O0 -march=rv64gc -mabi=lp64d -S benches/code.c -o benches/assembly.s
+```
+### Create the executable ELF to be mapped on RISC-V architecture
+```bash
+riscv64-linux-gnu-gcc -static -march=rv64gc -mabi=lp64d benches/assembly.s -o benches/executables/assembly
 ```
 ## Run the simulation with gem5
+```bash
+../gem5/build/ALL/gem5.opt   --outdir results/   configs/sum.py   --bin benches/executables/sum
+```
+
+
+------------------
 
 ```bash
 cd ~/Desktop/softmax-rvv
@@ -26,6 +38,7 @@ python3 tools/parse_stats.py results/softmax_scalar/N_64000/stats_N64000.txt res
 ```bash
 python3 tools/plot_stats.py   board.cache_hierarchy.membus.respLayer1.utilization   results/softmax_scalar/sofmax_scalar_stats.csv   results/softmax_vect_baseline/sofmax_scalar_stats.csv   results/softmax_vect_enhanced/sofmax_scalar_stats.csv
 ```
+
 
 
 

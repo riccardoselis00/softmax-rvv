@@ -1,5 +1,4 @@
 import argparse
-from pathlib import Path
 from gem5.components.boards.simple_board import SimpleBoard
 from gem5.components.cachehierarchies.classic.no_cache import NoCache
 from gem5.components.memory.single_channel import SingleChannelDDR3_1600
@@ -10,8 +9,7 @@ from gem5.simulate.simulator import Simulator
 from gem5.resources.resource import CustomResource
 
 p = argparse.ArgumentParser()
-p.add_argument("--bin", required=True)
-p.add_argument("--n", type=int, default=8192)
+p.add_argument("--bin", required=True, help="Path to RISC-V ELF binary")
 args = p.parse_args()
 
 board = SimpleBoard(
@@ -21,10 +19,8 @@ board = SimpleBoard(
     cache_hierarchy=NoCache(),
 )
 
-board.set_se_binary_workload(
-    CustomResource(args.bin),
-    arguments=[str(args.n)],
-)
+# Just run the binary, no arguments needed
+board.set_se_binary_workload(CustomResource(args.bin))
 
 sim = Simulator(board=board)
 sim.run()
