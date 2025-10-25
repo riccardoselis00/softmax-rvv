@@ -1,6 +1,7 @@
 # Custom Vector Instructions for Softmax on RISC-V in gem5
 
 ## Delving Into the Project
+
 Here is the project's organization overview:
 
 ```bash
@@ -26,7 +27,13 @@ Here is the project's organization overview:
     └── __pycache__
 ```
 
-## Creating the executables 
+## Creating the gem5 executable `gem5.opt`
+```bash
+scons build/RISCV/gem5.opt -j22
+```
+
+
+## Creating the c code executable 
 
 ### from  .c $\to$ .s
 
@@ -42,19 +49,13 @@ riscv64-linux-gnu-gcc -static -march=rv64gc -mabi=lp64d benches/assembly/assembl
 
 
 ## Run the simulation with gem5
-<!-- ```bash
-../gem5/build/ALL/gem5.opt   --outdir results/   configs/sum.py   --bin benches/executables/sum
-``` -->
+
 
 ```bash
 build/RISCV/gem5.opt   --outdir=../softmax-rvv/results/res-folder   configs/deprecated/example/se.py   --cpu-type=O3CPU --caches --l2cache   -c ../softmax-rvv/benches/executables/exe
 ```
 ------------------
 
-<!-- ```bash
-cd ~/Desktop/softmax-rvv
-N=dim sh -c '../gem5/build/ALL/gem5.opt --outdir results/softmax_version/-N_${N} --stats-file stats_N${N}.txt configs/script.py --bin "$(pwd)/benches/exe" --n ${N}'
-``` -->
 ## Aggregate Data
 
 ### Scalar Baseline Softmax Version
