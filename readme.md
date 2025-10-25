@@ -2,30 +2,35 @@
 
 ## Delving Into the Project
 
-## Compiling 
+## Creating the executables 
 
-### Create the assembly.s  to be modified manually with Custom Instruction
+### from  .c $\to$ .s
 
 ```bash
-cd ~/Desktop/softmax-rvv
-riscv64-linux-gnu-gcc -O0 -march=rv64gc -mabi=lp64d -S benches/code.c -o benches/assembly.s
+riscv64-linux-gnu-gcc -O0 -march=rv64gc -mabi=lp64d -S benches/codes/code.c -o benches/assembly/assembly.s
 ```
-### Create the executable ELF to be mapped on RISC-V architecture
+
+### from .s $\to$ ELF
+
 ```bash
-riscv64-linux-gnu-gcc -static -march=rv64gc -mabi=lp64d benches/assembly.s -o benches/executables/assembly
+riscv64-linux-gnu-gcc -static -march=rv64gc -mabi=lp64d benches/assembly/assembly.s -o benches/executables/exe
 ```
+
+
 ## Run the simulation with gem5
-```bash
+<!-- ```bash
 ../gem5/build/ALL/gem5.opt   --outdir results/   configs/sum.py   --bin benches/executables/sum
+``` -->
+
+```bash
+build/RISCV/gem5.opt   --outdir=../softmax-rvv/results/res-folder   configs/deprecated/example/se.py   --cpu-type=O3CPU --caches --l2cache   -c ../softmax-rvv/benches/executables/exe
 ```
-
-
 ------------------
 
-```bash
+<!-- ```bash
 cd ~/Desktop/softmax-rvv
 N=dim sh -c '../gem5/build/ALL/gem5.opt --outdir results/softmax_version/-N_${N} --stats-file stats_N${N}.txt configs/script.py --bin "$(pwd)/benches/exe" --n ${N}'
-```
+``` -->
 ## Aggregate Data
 
 ### Scalar Baseline Softmax Version
