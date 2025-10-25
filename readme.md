@@ -1,6 +1,30 @@
 # Custom Vector Instructions for Softmax on RISC-V in gem5
 
 ## Delving Into the Project
+Here is the project's organization overview:
+
+```bash
+├── analysis.ipynb
+├── benches
+│   ├── assembly
+│   ├── codes
+│   └── executables
+├── configs
+│   └── sum.py
+├── doc
+├── extern
+│   └── Tiny-Vedas
+├── m5out
+├── readme.md
+├── results
+│   ├── results_OpLat-3_pipeline-false_count-1
+│   ├── results_OpLat-4_pipeline-false_count-1
+│   └── results_OpLat-4_pipeline-true_count-1
+└── tools
+    ├── parse_stats.py
+    ├── plot_stats.py
+    └── __pycache__
+```
 
 ## Creating the executables 
 
