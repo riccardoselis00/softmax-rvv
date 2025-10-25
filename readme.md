@@ -40,13 +40,11 @@ scons build/RISCV/gem5.opt -j22
 ```bash
 riscv64-linux-gnu-gcc -O0 -march=rv64gc -mabi=lp64d -S benches/codes/code.c -o benches/assembly/assembly.s
 ```
-
 ### from .s $\to$ ELF
 
 ```bash
 riscv64-linux-gnu-gcc -static -march=rv64gc -mabi=lp64d benches/assembly/assembly.s -o benches/executables/exe
 ```
-
 
 ## Run the simulation with gem5
 
