@@ -1,0 +1,14 @@
+7,9c7,9
+< hostSeconds                                      0.36                       # Real time elapsed on the host (Second)
+< hostTickRate                                235389306                       # The number of ticks simulated per host second (ticks/s) ((Tick/Second))
+< hostMemory                                     676856                       # Number of bytes of host memory used (Byte)
+---
+> hostSeconds                                      0.39                       # Real time elapsed on the host (Second)
+> hostTickRate                                219230690                       # The number of ticks simulated per host second (ticks/s) ((Tick/Second))
+> hostMemory                                     676860                       # Number of bytes of host memory used (Byte)
+12,13c12,13
+< hostInstRate                                   317255                       # Simulator instruction rate (inst/s) ((Count/Second))
+< hostOpRate                                     317380                       # Simulator op (including micro ops) rate (op/s) ((Count/Second))
+---
+> hostInstRate                                   295481                       # Simulator instruction rate (inst/s) ((Count/Second))
+> hostOpRate                                     295598                       # Simulator op (including micro ops) rate (op/s) ((Count/Second))
