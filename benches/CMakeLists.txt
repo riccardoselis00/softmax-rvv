@@ -83,3 +83,18 @@ if(SOFT_BUILD_TESTS)
     add_test(NAME test_poly_horner COMMAND test_poly_horner)
   endif()
 endif()
+
+# ---------------- benches ----------------
+if(SOFT_BUILD_BENCHES)
+  add_executable(bench_poly_horner_ref    ${ROOT}/benches/bench_poly_horner_ref.c)
+  target_link_libraries(bench_poly_horner_ref PRIVATE soft_kernels soft_common)
+  target_include_directories(bench_poly_horner_ref PRIVATE ${ROOT}/kernels ${ROOT}/common)
+  soft_apply_isa_flags(bench_poly_horner_ref)
+  soft_maybe_static(bench_poly_horner_ref)
+
+  add_executable(bench_poly_horner_custom ${ROOT}/benches/bench_poly_horner_custom.c)
+  target_link_libraries(bench_poly_horner_custom PRIVATE soft_kernels soft_common)
+  target_include_directories(bench_poly_horner_custom PRIVATE ${ROOT}/kernels ${ROOT}/common)
+  soft_apply_isa_flags(bench_poly_horner_custom)
+  soft_maybe_static(bench_poly_horner_custom)
+endif()
