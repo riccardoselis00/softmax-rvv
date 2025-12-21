@@ -1454,10 +1454,7 @@
                         "name": "workload",
                         "path": "system.cpu.workload",
                         "cmd": [
-                            "../softmax-rvv/build-rv/bin/bench_poly_horner_custom",
-                            "--iters=200000",
-                            "--degree=6",
-                            "--range=low"
+                            "../softmax-rvv/build-rv/bin/bench_poly_horner_custom"
                         ],
                         "cwd": "/home/riccardo/Desktop/gem5",
                         "drivers": [],

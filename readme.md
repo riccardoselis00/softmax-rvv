@@ -17,3 +17,14 @@ cmake -S . -B build-rv   -DCMAKE_C_COMPILER=riscv64-linux-gnu-gcc   -DSOFT_MARCH
 ```bash
 cmake --build build-rv -j
 ```
+
+# Using m5lib
+
+```bash
+cmake -S . -B build-rv   -DCMAKE_TOOLCHAIN_FILE=cmake/toolchains/riscv64-linux-gnu.cmake   -DSOFT_USE_M5=ON   -DGEM5_ROOT=$HOME/Desktop/gem5   -DSOFT_BEN
+CH_STATIC=ON   -DSOFT_MARCH=rv64gcv   -DSOFT_MABI=lp64d
+```
+
+```bash
+cmake --build build-rv -j
+```

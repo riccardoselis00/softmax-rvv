@@ -7,12 +7,16 @@
 #include "ops.h"
 #include "poly_horner.h"
 
+#ifdef SOFT_USE_M5OPS
+  #include <gem5/m5ops.h>
+#else
+  static inline void m5_reset_stats(uint64_t a, uint64_t b) { (void)a; (void)b; }
+  static inline void m5_dump_stats(uint64_t a, uint64_t b)  { (void)a; (void)b; }
+  static inline void m5_exit(uint64_t a)                    { (void)a; }
+#endif
+
 static void usage(const char* prog) {
   printf("Usage: %s [--iters=N] [--degree=D] [--range=low|high] [--seed=S]\n", prog);
-  printf("  --iters   default 200000\n");
-  printf("  --degree  default 2\n");
-  printf("  --range   low=[-8,7], high=[-64,63] (default low)\n");
-  printf("  --seed    default 12345\n");
 }
 
 static int parse_u64_arg(const char* s, const char* key, uint64_t* out) {
@@ -29,7 +33,6 @@ static int parse_i32_arg(const char* s, const char* key, int* out) {
   return 1;
 }
 
-// Build initial z_vec with lanes mapped into a range, once
 static uint64_t make_z0(int lo, int hi) {
   uint64_t x = bench_rand_u64();
   uint64_t z = 0;
@@ -46,7 +49,7 @@ static uint64_t make_z0(int lo, int hi) {
 
 int main(int argc, char** argv)
 {
-  uint64_t iters = 200000ULL;   // smaller default for gem5
+  uint64_t iters = 200000ULL;
   int degree = 2;
   uint64_t seed = 12345ULL;
   int lo = -8, hi = 7;
@@ -73,40 +76,41 @@ int main(int argc, char** argv)
 
   int8_t coeffs[17] = {0};
   if (degree == 2) {
-    coeffs[0] = 0; coeffs[1] = 1; coeffs[2] = 1;  // z^2+z
+    coeffs[0] = 0; coeffs[1] = 1; coeffs[2] = 1;
   } else {
-    for (int k = 0; k <= degree; ++k) coeffs[k] = (int8_t)((k % 5) - 2); // [-2..2]
+    for (int k = 0; k <= degree; ++k) coeffs[k] = (int8_t)((k % 5) - 2);
   }
 
   bench_rng_seed(seed);
   uint64_t z = make_z0(lo, hi);
   const uint64_t delta = 0x0101010101010101ULL;
 
-  printf("[REF] START poly_horner: iters=%llu degree=%d range=[%d,%d]\n",
+  printf("[REF] poly_horner ROI: iters=%llu degree=%d range=[%d,%d]\n",
          (unsigned long long)iters, degree, lo, hi);
   fflush(stdout);
 
-  // Warm-up (tiny)
+  // Warm-up: excluded from stats
+  uint64_t warm = 0;
   for (int i = 0; i < 64; ++i) {
     z += delta;
-    uint64_t out = poly_horner_eval_i8x8(ops, z, coeffs, degree);
-    bench_sink_u64(out);
+    warm ^= poly_horner_eval_i8x8(ops, z, coeffs, degree);
   }
+  bench_sink_u64(warm);
 
-  uint64_t c0 = bench_rdcycle();
+  // ROI starts here
+  m5_reset_stats(0, 0);
 
   uint64_t checksum = 0;
   for (uint64_t i = 0; i < iters; ++i) {
     z += delta;
     uint64_t out = poly_horner_eval_i8x8(ops, z, coeffs, degree);
     checksum += (out & 0xFFu);
-    bench_sink_u64(out ^ checksum);
   }
 
-  uint64_t c1 = bench_rdcycle();
+  bench_sink_u64(checksum);
 
-  printf("[REF] DONE\n");
-  printf("  cycles   = %llu\n", (unsigned long long)(c1 - c0));
-  printf("  checksum = 0x%016llx\n", (unsigned long long)checksum);
+  m5_dump_stats(0, 0);
+  m5_exit(0);
+
   return 0;
 }
