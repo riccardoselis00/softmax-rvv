@@ -174,4 +174,20 @@ if(SOFT_BUILD_BENCHES)
   soft_maybe_static(bench_pdiv8_custom)
   soft_link_m5(bench_pdiv8_custom)
 
+  add_executable(bench_softmax_custom ${ROOT}/benches/bench_softmax_custom.c)
+  target_link_libraries(bench_softmax_custom PRIVATE soft_common)
+  target_include_directories(bench_softmax_custom PRIVATE ${ROOT}/common)
+  target_compile_definitions(bench_softmax_custom PRIVATE SOFT_HAVE_CUSTOM_OPS=1)
+  soft_apply_isa_flags(bench_softmax_custom)
+  soft_maybe_static(bench_softmax_custom)
+  soft_link_m5(bench_softmax_custom)
+
+  add_executable(bench_softmax_ref ${ROOT}/benches/bench_softmax_ref.c)
+  target_link_libraries(bench_softmax_ref PRIVATE soft_common)
+  target_include_directories(bench_softmax_ref PRIVATE ${ROOT}/common)
+  soft_apply_isa_flags(bench_softmax_ref)
+  soft_maybe_static(bench_softmax_ref)
+  soft_link_m5(bench_softmax_ref)
+
+
 endif()
